@@ -3,18 +3,22 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-#Модель логин + пароль для входа
-class User(BaseModel):
-    username: str
-    password: str
+class User(BaseModel): #модель пользователя
+    name : str
+    password : str
 
-fake_db = {
-    "username": "admin",
-    "password": "123"
+class Token(BaseModel): #модель токена
+    access_token: str
+
+#создаем пока фейковую bd потом заменить на нормальную
+fake_bd = {
+    "admin" : {
+        "Username" : "admin",
+        "Password" : "123"
+    }
 }
 
-app.post("/login")
-def login(user:User):
-    if user.username in fake_db and fake_db[user.username] == user.password:
-        return {"status ok"}
-    return {"Status": "Invalid credentials"}
+@app.get("/")
+async def root():
+    return ("Hello")
+
